@@ -7,18 +7,36 @@ const siteConfig = (await getCollection('site'))[0];
 ---
 
 <footer>
-	<div class="group">
-		<p>
-			{siteConfig.data.footer.text} {siteConfig.data.footer.location && siteConfig.data.footer.location} with <a href="https://astro.build/">Astro</a>
-			<Icon icon="rocket-launch" size="1.2em" />
+	<div class="footer-main">
+		<div class="group">
+			<p>
+				{siteConfig.data.footer.text} {siteConfig.data.footer.location && siteConfig.data.footer.location} with <a href="https://astro.build/">Astro</a>
+				<Icon icon="rocket-launch" size="1.2em" />
+			</p>
+			<p>&copy; {currentYear} {siteConfig.data.name}</p>
+		</div>
+		<p class="socials">
+			{siteConfig.data.social.map((social) => (
+				<a href={social.href}> {social.label}</a>
+			))}
 		</p>
-		<p>&copy; {currentYear} {siteConfig.data.name}</p>
 	</div>
-	<p class="socials">
-		{siteConfig.data.social.map((social) => (
-			<a href={social.href}> {social.label}</a>
-		))}
-	</p>
+	
+	{siteConfig.data.legal && (
+		<div class="footer-legal">
+			<div class="legal-links">
+				<a href="/privacy-policy/">Política de Privacidad</a>
+				<a href="/legal-notice/">Aviso Legal</a>
+				<a href="/cookie-policy/">Política de Cookies</a>
+			</div>
+			<div class="legal-info">
+				<p>{siteConfig.data.legal.companyName} - {siteConfig.data.legal.taxId}</p>
+				<p>{siteConfig.data.legal.address}</p>
+				{siteConfig.data.legal.phone && <p>Tel: {siteConfig.data.legal.phone}</p>}
+				{siteConfig.data.legal.legalEmail && <p>Email: <a href={`mailto:${siteConfig.data.legal.legalEmail}`}>{siteConfig.data.legal.legalEmail}</a></p>}
+			</div>
+		</div>
+	)}
 </footer>
 <style>
 	footer {
@@ -57,11 +75,58 @@ const siteConfig = (await getCollection('site'))[0];
 		flex-wrap: wrap;
 	}
 
+	.footer-main {
+		display: flex;
+		flex-direction: column;
+		gap: 2rem;
+	}
+
+	.footer-legal {
+		margin-top: 2rem;
+		padding-top: 2rem;
+		border-top: 1px solid var(--gray-800);
+		display: flex;
+		flex-direction: column;
+		gap: 1.5rem;
+		color: var(--gray-300);
+		font-size: var(--text-sm);
+	}
+
+	.legal-links {
+		display: flex;
+		gap: 1rem;
+		flex-wrap: wrap;
+		justify-content: center;
+	}
+
+	.legal-links a {
+		color: var(--gray-300);
+	}
+
+	.legal-info {
+		display: flex;
+		flex-direction: column;
+		gap: 0.25rem;
+		text-align: center;
+	}
+
+	.legal-info p {
+		margin: 0;
+	}
+
+	.legal-info a {
+		color: var(--gray-300);
+	}
+
 	@media (min-width: 50em) {
 		footer {
+			flex-direction: column;
+			padding: 2.5rem 5rem;
+		}
+
+		.footer-main {
 			flex-direction: row;
 			justify-content: space-between;
-			padding: 2.5rem 5rem;
 		}
 
 		.group {
@@ -72,6 +137,20 @@ const siteConfig = (await getCollection('site'))[0];
 
 		.socials {
 			justify-content: flex-end;
+		}
+
+		.footer-legal {
+			flex-direction: row;
+			justify-content: space-between;
+			align-items: flex-start;
+		}
+
+		.legal-links {
+			justify-content: flex-start;
+		}
+
+		.legal-info {
+			text-align: right;
 		}
 	}
 </style>

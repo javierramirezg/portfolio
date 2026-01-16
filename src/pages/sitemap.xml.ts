@@ -7,6 +7,9 @@ export const GET: APIRoute = async ({ site }) => {
 	// Get all work projects
 	const workProjects = await getCollection('work');
 	
+	// Get all legal pages
+	const legalPages = await getCollection('legal');
+	
 	// Static pages
 	const staticPages = [
 		{ url: '', changefreq: 'daily', priority: '1.0', lastmod: new Date().toISOString() },
@@ -22,8 +25,16 @@ export const GET: APIRoute = async ({ site }) => {
 		lastmod: project.data.publishDate.toISOString(),
 	}));
 	
+	// Legal pages
+	const legalPagesList = legalPages.map((legal) => ({
+		url: `${legal.id}/`,
+		changefreq: 'monthly',
+		priority: '0.6',
+		lastmod: legal.data.lastUpdated?.toISOString() || new Date().toISOString(),
+	}));
+	
 	// Combine all pages
-	const allPages = [...staticPages, ...dynamicPages];
+	const allPages = [...staticPages, ...dynamicPages, ...legalPagesList];
 	
 	// Generate sitemap XML
 	const sitemap = `<?xml version="1.0" encoding="UTF-8"?>

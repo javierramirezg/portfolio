@@ -31,6 +31,41 @@ collections:
             fields:
               - { label: "Text", name: "text", widget: "string" }
               - { label: "Location", name: "location", widget: "string", required: false }
+          - label: "Datos Legales/Fiscales"
+            name: "legal"
+            widget: "object"
+            required: false
+            fields:
+              - { label: "Razón Social", name: "companyName", widget: "string" }
+              - { label: "NIF/CIF", name: "taxId", widget: "string" }
+              - { label: "Dirección", name: "address", widget: "text" }
+              - { label: "Teléfono", name: "phone", widget: "string", required: false }
+              - { label: "Email Legal", name: "legalEmail", widget: "string", required: false, pattern: ["^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,}$", "Must be a valid email address"] }
+              - { label: "Registro Mercantil", name: "commercialRegister", widget: "string", required: false }
+          - label: "SEO Global"
+            name: "seo"
+            widget: "object"
+            required: false
+            fields:
+              - { label: "Descripción por defecto", name: "defaultMetaDescription", widget: "text", required: false }
+              - label: "Keywords por defecto"
+                name: "defaultKeywords"
+                widget: "list"
+                required: false
+                field: { label: "Keyword", name: "keyword", widget: "string" }
+          - label: "Configuración de Cookies"
+            name: "cookies"
+            widget: "object"
+            required: false
+            fields:
+              - label: "Tipos de Cookies"
+                name: "types"
+                widget: "list"
+                required: false
+                fields:
+                  - { label: "Nombre", name: "name", widget: "string" }
+                  - { label: "Descripción", name: "description", widget: "text" }
+                  - { label: "Obligatoria", name: "required", widget: "boolean", default: false, required: false }
 
   - name: "home"
     label: "Home Page"
@@ -77,6 +112,15 @@ collections:
                 name: "brands"
                 widget: "list"
                 field: { label: "Brand Name", name: "brand", widget: "string" }
+          - { label: "Meta Title (opcional)", name: "metaTitle", widget: "string", required: false, hint: "Si no se especifica, se usará el nombre y tagline" }
+          - { label: "Meta Description (opcional)", name: "metaDescription", widget: "text", required: false }
+          - label: "Meta Keywords (opcional)"
+            name: "metaKeywords"
+            widget: "list"
+            required: false
+            field: { label: "Keyword", name: "keyword", widget: "string" }
+          - { label: "Meta Image (opcional)", name: "metaImage", widget: "image", required: false }
+          - { label: "Canonical URL (opcional)", name: "canonical", widget: "string", required: false }
 
   - name: "about"
     label: "About Page"
@@ -108,6 +152,15 @@ collections:
             fields:
               - { label: "Section Title", name: "title", widget: "string" }
               - { label: "Content", name: "content", widget: "markdown" }
+          - { label: "Meta Title (opcional)", name: "metaTitle", widget: "string", required: false, hint: "Si no se especifica, se usará 'About | [Site Name]'" }
+          - { label: "Meta Description (opcional)", name: "metaDescription", widget: "text", required: false }
+          - label: "Meta Keywords (opcional)"
+            name: "metaKeywords"
+            widget: "list"
+            required: false
+            field: { label: "Keyword", name: "keyword", widget: "string" }
+          - { label: "Meta Image (opcional)", name: "metaImage", widget: "image", required: false }
+          - { label: "Canonical URL (opcional)", name: "canonical", widget: "string", required: false }
 
   - name: "skills"
     label: "Skills"
@@ -141,4 +194,40 @@ collections:
         name: "tags"
         widget: "list"
         field: { label: "Tag", name: "tag", widget: "string" }
+      - { label: "Meta Title (opcional)", name: "metaTitle", widget: "string", required: false, hint: "Si no se especifica, se usará '[Title] | [Site Name]'" }
+      - { label: "Meta Description (opcional)", name: "metaDescription", widget: "text", required: false }
+      - label: "Meta Keywords (opcional)"
+        name: "metaKeywords"
+        widget: "list"
+        required: false
+        field: { label: "Keyword", name: "keyword", widget: "string" }
+      - { label: "Meta Image (opcional)", name: "metaImage", widget: "image", required: false }
+      - { label: "Canonical URL (opcional)", name: "canonical", widget: "string", required: false }
       - { label: "Body", name: "body", widget: "markdown" }
+
+  - name: "legal"
+    label: "Páginas Legales"
+    folder: "src/content/legal"
+    create: false
+    slug: "{{slug}}"
+    extension: "md"
+    format: "frontmatter"
+    frontmatter_delimiter: "---"
+    fields:
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Last Updated", name: "lastUpdated", widget: "datetime", date_format: "YYYY-MM-DD", time_format: "HH:mm:ss", format: "YYYY-MM-DD HH:mm:ss", required: false }
+      - label: "Content Sections"
+        name: "sections"
+        widget: "list"
+        fields:
+          - { label: "Section Title", name: "title", widget: "string" }
+          - { label: "Content", name: "content", widget: "markdown" }
+      - { label: "Meta Title (opcional)", name: "metaTitle", widget: "string", required: false }
+      - { label: "Meta Description (opcional)", name: "metaDescription", widget: "text", required: false }
+      - label: "Meta Keywords (opcional)"
+        name: "metaKeywords"
+        widget: "list"
+        required: false
+        field: { label: "Keyword", name: "keyword", widget: "string" }
+      - { label: "Meta Image (opcional)", name: "metaImage", widget: "image", required: false }
+      - { label: "Canonical URL (opcional)", name: "canonical", widget: "string", required: false }

@@ -27,10 +27,12 @@ const { entry } = Astro.props;
 const { Content } = await render(entry);
 const siteConfig = (await getCollection('site'))[0];
 
-const pageTitle = `${entry.data.title} | ${siteConfig.data.name}`;
-const pageDescription = entry.data.description;
-const pageImage = entry.data.img || '/assets/portrait.jpg';
+// SEO from content or fallback to defaults
+const pageTitle = entry.data.metaTitle || `${entry.data.title} | ${siteConfig.data.name}`;
+const pageDescription = entry.data.metaDescription || entry.data.description;
+const pageImage = entry.data.metaImage || entry.data.img || '/assets/portrait.jpg';
 const pageUrl = Astro.url.href;
+const canonical = entry.data.canonical || pageUrl;
 
 // Breadcrumbs for navigation
 const breadcrumbs = [
@@ -39,8 +41,8 @@ const breadcrumbs = [
 	{ name: entry.data.title, url: `/work/${entry.id}/` },
 ];
 
-// Keywords from tags
-const keywords = entry.data.tags.join(', ');
+// Keywords from content or tags
+const keywords = entry.data.metaKeywords?.join(', ') || entry.data.tags.join(', ');
 ---
 
 <BaseLayout
@@ -49,6 +51,7 @@ const keywords = entry.data.tags.join(', ');
 	image={pageImage}
 	type="article"
 	keywords={`${entry.data.title}, ${keywords}, portfolio`}
+	canonical={canonical}
 	breadcrumbs={breadcrumbs}
 >
 	<div class="stack gap-20">

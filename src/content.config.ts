@@ -12,6 +12,12 @@ export const collections = {
 			tags: z.array(z.string()),
 			img: z.string(),
 			img_alt: z.string().optional(),
+			// SEO fields
+			metaTitle: z.string().optional(),
+			metaDescription: z.string().optional(),
+			metaKeywords: z.array(z.string()).optional(),
+			metaImage: z.string().optional(),
+			canonical: z.string().optional(),
 		}),
 	}),
 	home: defineCollection({
@@ -43,6 +49,12 @@ export const collections = {
 				description: z.string(),
 				brands: z.array(z.string()),
 			}),
+			// SEO fields
+			metaTitle: z.string().optional(),
+			metaDescription: z.string().optional(),
+			metaKeywords: z.array(z.string()).optional(),
+			metaImage: z.string().optional(),
+			canonical: z.string().optional(),
 		}),
 	}),
 	about: defineCollection({
@@ -64,6 +76,12 @@ export const collections = {
 					content: z.string(),
 				}),
 			),
+			// SEO fields
+			metaTitle: z.string().optional(),
+			metaDescription: z.string().optional(),
+			metaKeywords: z.array(z.string()).optional(),
+			metaImage: z.string().optional(),
+			canonical: z.string().optional(),
 		}),
 	}),
 	site: defineCollection({
@@ -82,6 +100,30 @@ export const collections = {
 				text: z.string(),
 				location: z.string().optional(),
 			}),
+			// Legal/Fiscal data
+			legal: z.object({
+				companyName: z.string(),
+				taxId: z.string(),
+				address: z.string(),
+				phone: z.string().optional(),
+				legalEmail: z.string().email().optional(),
+				commercialRegister: z.string().optional(),
+			}).optional(),
+			// Global SEO defaults
+			seo: z.object({
+				defaultMetaDescription: z.string().optional(),
+				defaultKeywords: z.array(z.string()).optional(),
+			}).optional(),
+			// Cookie configuration
+			cookies: z.object({
+				types: z.array(
+					z.object({
+						name: z.string(),
+						description: z.string(),
+						required: z.boolean().optional(),
+					}),
+				).optional(),
+			}).optional(),
 		}),
 	}),
 	skills: defineCollection({
@@ -94,6 +136,25 @@ export const collections = {
 					description: z.string(),
 				}),
 			),
+		}),
+	}),
+	legal: defineCollection({
+		loader: glob({ base: './src/content/legal', pattern: '**/*.md' }),
+		schema: z.object({
+			title: z.string(),
+			lastUpdated: z.coerce.date().optional(),
+			sections: z.array(
+				z.object({
+					title: z.string(),
+					content: z.string(),
+				}),
+			),
+			// SEO fields
+			metaTitle: z.string().optional(),
+			metaDescription: z.string().optional(),
+			metaKeywords: z.array(z.string()).optional(),
+			metaImage: z.string().optional(),
+			canonical: z.string().optional(),
 		}),
 	}),
 };

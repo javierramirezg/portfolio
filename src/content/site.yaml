@@ -20,5 +20,35 @@ social:
     href: https://www.youtube.com/@me/
     icon: youtube-logo
 footer:
-  text: Designed & Developed in
-  location: Portland
+  text: "Designed & Developed in"
+  location: "Portland"
+
+# Datos fiscales/legales
+legal:
+  companyName: "Nombre de la Empresa"
+  taxId: "B12345678"
+  address: "Calle Principal 123, 28001 Madrid, España"
+  phone: "+34 912 345 678"
+  legalEmail: "legal@example.com"
+  commercialRegister: "Registro Mercantil de Madrid, Tomo 12345, Folio 67, Hoja M-123456"
+
+# SEO por defecto
+seo:
+  defaultMetaDescription: "Portfolio profesional"
+  defaultKeywords:
+    - "portfolio"
+    - "desarrollo web"
+    - "diseño"
+
+# Configuración de cookies
+cookies:
+  types:
+    - name: "Esenciales"
+      description: "Cookies necesarias para el funcionamiento del sitio web"
+      required: true
+    - name: "Analíticas"
+      description: "Cookies que nos ayudan a entender cómo los visitantes interactúan con el sitio web"
+      required: false
+    - name: "Marketing"
+      description: "Cookies utilizadas para rastrear a los visitantes en diferentes sitios web"
+      required: false

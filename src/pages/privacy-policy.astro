@@ -1,0 +1,147 @@
+---
+import { getCollection } from 'astro:content';
+import { marked } from 'marked';
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const legalContent = (await getCollection('legal')).find(item => item.id === 'privacy-policy');
+const siteConfig = (await getCollection('site'))[0];
+
+if (!legalContent) {
+	throw new Error('Privacy policy content not found');
+}
+
+// Replace placeholders in content with actual legal data
+const legalData = siteConfig.data.legal;
+const siteUrl = Astro.site?.href || '';
+
+function replacePlaceholders(text: string): string {
+	if (!legalData) return text;
+	
+	return text
+		.replace(/\{\{COMPANY_NAME\}\}/g, legalData.companyName)
+		.replace(/\{\{TAX_ID\}\}/g, legalData.taxId)
+		.replace(/\{\{ADDRESS\}\}/g, legalData.address)
+		.replace(/\{\{PHONE\}\}/g, legalData.phone || '')
+		.replace(/\{\{LEGAL_EMAIL\}\}/g, legalData.legalEmail || siteConfig.data.email)
+		.replace(/\{\{COMMERCIAL_REGISTER\}\}/g, legalData.commercialRegister || '')
+		.replace(/\{\{SITE_URL\}\}/g, siteUrl);
+}
+
+const pageTitle = legalContent.data.metaTitle || `${legalContent.data.title} | ${siteConfig.data.name}`;
+const pageDescription = legalContent.data.metaDescription || `${legalContent.data.title} - ${siteConfig.data.name}`;
+const pageKeywords = legalContent.data.metaKeywords || [legalContent.data.title, siteConfig.data.name, 'política de privacidad'];
+---
+
+<BaseLayout
+	title={pageTitle}
+	description={pageDescription}
+	keywords={pageKeywords.join(', ')}
+	canonical={legalContent.data.canonical || `${siteUrl}/privacy-policy/`}
+>
+	<div class="stack gap-20">
+		<main class="wrapper legal-page">
+			<header class="legal-header">
+				<h1>{legalContent.data.title}</h1>
+				{legalContent.data.lastUpdated && (
+					<p class="last-updated">
+						Última actualización: {new Date(legalContent.data.lastUpdated).toLocaleDateString('es-ES', {
+							year: 'numeric',
+							month: 'long',
+							day: 'numeric'
+						})}
+					</p>
+				)}
+			</header>
+
+			{legalContent.data.sections.map((section) => (
+				<section>
+					<h2 class="section-title">{section.title}</h2>
+					<div class="content" set:html={marked.parse(replacePlaceholders(section.content))} />
+				</section>
+			))}
+		</main>
+	</div>
+</BaseLayout>
+
+<style>
+	.legal-page {
+		display: flex;
+		flex-direction: column;
+		gap: 3.5rem;
+		max-width: 65ch;
+	}
+
+	.legal-header {
+		display: flex;
+		flex-direction: column;
+		gap: 0.5rem;
+		margin-bottom: 2rem;
+	}
+
+	.legal-header h1 {
+		font-size: var(--text-2xl);
+		color: var(--gray-0);
+	}
+
+	.last-updated {
+		color: var(--gray-300);
+		font-size: var(--text-sm);
+	}
+
+	section {
+		display: flex;
+		flex-direction: column;
+		gap: 0.5rem;
+		color: var(--gray-200);
+	}
+
+	.section-title {
+		font-size: var(--text-xl);
+		color: var(--gray-0);
+		margin-top: 2rem;
+		margin-bottom: 0.5rem;
+	}
+
+	.content {
+		line-height: 1.8;
+	}
+
+	.content :global(h3) {
+		font-size: var(--text-lg);
+		color: var(--gray-100);
+		margin-top: 1.5rem;
+		margin-bottom: 0.5rem;
+	}
+
+	.content :global(ul),
+	.content :global(ol) {
+		margin-left: 1.5rem;
+		margin-top: 0.5rem;
+		margin-bottom: 0.5rem;
+	}
+
+	.content :global(li) {
+		margin-bottom: 0.5rem;
+	}
+
+	.content :global(strong) {
+		color: var(--gray-100);
+		font-weight: 600;
+	}
+
+	.content :global(a) {
+		text-decoration: 1px solid underline transparent;
+		text-underline-offset: 0.25em;
+		transition: text-decoration-color var(--theme-transition);
+		color: var(--accent-regular);
+	}
+
+	.content :global(a:hover),
+	.content :global(a:focus) {
+		text-decoration-color: currentColor;
+	}
+
+	.content :global(p) {
+		margin-bottom: 1rem;
+	}
+</style>

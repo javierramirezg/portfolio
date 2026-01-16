@@ -8,9 +8,12 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 const aboutContent = (await getCollection('about'))[0];
 const siteConfig = (await getCollection('site'))[0];
 
-const pageTitle = `About | ${siteConfig.data.name}`;
-const pageDescription = aboutContent.data.hero.tagline;
-const pageImage = aboutContent.data.hero.image.src;
+// SEO from content or fallback to defaults
+const pageTitle = aboutContent.data.metaTitle || `About | ${siteConfig.data.name}`;
+const pageDescription = aboutContent.data.metaDescription || aboutContent.data.hero.tagline;
+const pageImage = aboutContent.data.metaImage || aboutContent.data.hero.image.src;
+const pageKeywords = aboutContent.data.metaKeywords?.join(', ') || `${siteConfig.data.name}, about, portfolio, background`;
+const canonical = aboutContent.data.canonical;
 ---
 
 <BaseLayout
@@ -18,7 +21,8 @@ const pageImage = aboutContent.data.hero.image.src;
 	description={pageDescription}
 	image={pageImage}
 	type="website"
-	keywords={`${siteConfig.data.name}, about, portfolio, background`}
+	keywords={pageKeywords}
+	canonical={canonical}
 >
 	<div class="stack gap-20">
 		<main class="wrapper about">
