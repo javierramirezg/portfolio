@@ -2,22 +2,55 @@
 // Learn about using Astro layouts:
 // https://docs.astro.build/en/basics/layouts/
 
+import { getCollection } from 'astro:content';
 import Footer from '../components/Footer.astro';
 // Component Imports
 import MainHead from '../components/MainHead.astro';
 import Nav from '../components/Nav.astro';
+import StructuredData from '../components/StructuredData.astro';
 
 interface Props {
 	title?: string | undefined;
 	description?: string | undefined;
+	image?: string | undefined;
+	type?: string | undefined;
+	author?: string | undefined;
+	keywords?: string | undefined;
+	breadcrumbs?: Array<{ name: string; url: string }>;
 }
 
-const { title, description } = Astro.props;
+const { title, description, image, type = 'website', author, keywords, breadcrumbs } = Astro.props;
+
+// Get site configuration
+const siteConfig = (await getCollection('site'))[0];
+const siteUrl = Astro.url.origin;
+const canonical = Astro.url.href;
 ---
 
 <html lang="en">
 	<head>
-		<MainHead title={title} description={description} />
+		<MainHead
+			title={title}
+			description={description}
+			image={image}
+			url={canonical}
+			type={type}
+			author={author || siteConfig.data.name}
+			keywords={keywords}
+			siteName={siteConfig.data.name}
+			canonical={canonical}
+		/>
+		<StructuredData
+			type="website"
+			siteData={{
+				name: siteConfig.data.name,
+				email: siteConfig.data.email,
+				url: siteUrl,
+			}}
+		/>
+		{breadcrumbs && breadcrumbs.length > 0 && (
+			<StructuredData type="breadcrumb" breadcrumbs={breadcrumbs} />
+		)}
 	</head>
 	<body>
 		<div class="stack backgrounds">

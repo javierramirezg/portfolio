@@ -5,6 +5,7 @@ import ContactCTA from '../../components/ContactCTA.astro';
 import Hero from '../../components/Hero.astro';
 import Icon from '../../components/Icon.astro';
 import Pill from '../../components/Pill.astro';
+import StructuredData from '../../components/StructuredData.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 
 interface Props {
@@ -24,9 +25,32 @@ export async function getStaticPaths() {
 
 const { entry } = Astro.props;
 const { Content } = await render(entry);
+const siteConfig = (await getCollection('site'))[0];
+
+const pageTitle = `${entry.data.title} | ${siteConfig.data.name}`;
+const pageDescription = entry.data.description;
+const pageImage = entry.data.img || '/assets/portrait.jpg';
+const pageUrl = Astro.url.href;
+
+// Breadcrumbs for navigation
+const breadcrumbs = [
+	{ name: 'Home', url: '/' },
+	{ name: 'Work', url: '/work/' },
+	{ name: entry.data.title, url: `/work/${entry.id}/` },
+];
+
+// Keywords from tags
+const keywords = entry.data.tags.join(', ');
 ---
 
-<BaseLayout title={entry.data.title} description={entry.data.description}>
+<BaseLayout
+	title={pageTitle}
+	description={pageDescription}
+	image={pageImage}
+	type="article"
+	keywords={`${entry.data.title}, ${keywords}, portfolio`}
+	breadcrumbs={breadcrumbs}
+>
 	<div class="stack gap-20">
 		<div class="stack gap-15">
 			<header>
@@ -53,6 +77,22 @@ const { Content } = await render(entry);
 		</div>
 		<ContactCTA />
 	</div>
+	<StructuredData
+		type="article"
+		siteData={{
+			name: siteConfig.data.name,
+			email: siteConfig.data.email,
+			url: Astro.url.origin,
+		}}
+		article={{
+			title: entry.data.title,
+			description: entry.data.description,
+			image: pageImage,
+			publishDate: entry.data.publishDate.toISOString(),
+			author: siteConfig.data.name,
+			url: pageUrl,
+		}}
+	/>
 </BaseLayout>
 
 <style>

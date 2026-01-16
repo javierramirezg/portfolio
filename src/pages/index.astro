@@ -21,12 +21,23 @@ const projects = (await getCollection('work'))
 // Get static content
 const homeContent = (await getCollection('home'))[0];
 const skillsContent = (await getCollection('skills'))[0];
+const siteConfig = (await getCollection('site'))[0];
+
+const pageTitle = `${homeContent.data.hero.name} - ${homeContent.data.hero.tagline}`;
+const pageDescription = homeContent.data.hero.tagline;
+const pageImage = homeContent.data.hero.portrait.src;
 
 // Full Astro Component Syntax:
 // https://docs.astro.build/basics/astro-components/
 ---
 
-<BaseLayout>
+<BaseLayout
+	title={pageTitle}
+	description={pageDescription}
+	image={pageImage}
+	type="website"
+	keywords={`${homeContent.data.hero.name}, portfolio, ${homeContent.data.hero.roles.map((r) => r.label).join(', ')}`}
+>
 	<div class="stack gap-20 lg:gap-48">
 		<div class="wrapper stack gap-8 lg:gap-20">
 			<header class="hero">

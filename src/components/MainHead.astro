@@ -4,19 +4,61 @@ import '../styles/global.css';
 interface Props {
 	title?: string | undefined;
 	description?: string | undefined;
+	image?: string | undefined;
+	url?: string | undefined;
+	type?: string | undefined;
+	author?: string | undefined;
+	keywords?: string | undefined;
+	siteName?: string | undefined;
+	canonical?: string | undefined;
 }
 
 const {
 	title = 'Jeanine White: Personal Site',
 	description = 'The personal site of Jeanine White',
+	image = '/assets/portrait.jpg',
+	url = Astro.url.href,
+	type = 'website',
+	author = 'Jeanine White',
+	keywords = 'portfolio, developer, creative developer, web developer',
+	siteName = 'Jeanine White',
+	canonical = Astro.url.href,
 } = Astro.props;
+
+// Asegurar que image y canonical sean URLs absolutas
+const absoluteImage = image.startsWith('http') ? image : new URL(image, Astro.url.origin).href;
+const absoluteCanonical = canonical.startsWith('http') ? canonical : new URL(canonical, Astro.url.origin).href;
+const absoluteUrl = url.startsWith('http') ? url : new URL(url, Astro.url.origin).href;
 ---
 
 <meta charset="UTF-8" />
-<meta name="description" property="og:description" content={description} />
-<meta name="viewport" content="width=device-width" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta name="generator" content={Astro.generator} />
+
+<!-- Primary Meta Tags -->
 <title>{title}</title>
+<meta name="title" content={title} />
+<meta name="description" content={description} />
+<meta name="author" content={author} />
+<meta name="keywords" content={keywords} />
+<meta name="robots" content="index, follow" />
+<link rel="canonical" href={absoluteCanonical} />
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content={type} />
+<meta property="og:url" content={absoluteUrl} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:image" content={absoluteImage} />
+<meta property="og:site_name" content={siteName} />
+<meta property="og:locale" content="en_US" />
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:url" content={absoluteUrl} />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={absoluteImage} />
 
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />

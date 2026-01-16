@@ -1,0 +1,106 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+	type?: 'person' | 'website' | 'breadcrumb' | 'article';
+	siteData?: {
+		name: string;
+		email: string;
+		url?: string;
+	};
+	breadcrumbs?: Array<{ name: string; url: string }>;
+	article?: {
+		title: string;
+		description: string;
+		image?: string;
+		publishDate: string;
+		author?: string;
+		url?: string;
+	};
+}
+
+const { type = 'website', siteData, breadcrumbs, article } = Astro.props;
+const siteUrl = Astro.url.origin;
+
+// Person schema (for author/creator)
+const getPersonSchema = () => {
+	if (!siteData) return null;
+	return {
+		'@context': 'https://schema.org',
+		'@type': 'Person',
+		name: siteData.name,
+		email: siteData.email,
+		url: siteData.url || siteUrl,
+		sameAs: [], // Will be populated from social links
+	};
+};
+
+// Website schema
+const getWebsiteSchema = () => {
+	if (!siteData) return null;
+	return {
+		'@context': 'https://schema.org',
+		'@type': 'WebSite',
+		name: siteData.name,
+		url: siteUrl,
+		author: {
+			'@type': 'Person',
+			name: siteData.name,
+			email: siteData.email,
+		},
+	};
+};
+
+// Breadcrumb schema
+const getBreadcrumbSchema = () => {
+	if (!breadcrumbs || breadcrumbs.length === 0) return null;
+	return {
+		'@context': 'https://schema.org',
+		'@type': 'BreadcrumbList',
+		itemListElement: breadcrumbs.map((crumb, index) => ({
+			'@type': 'ListItem',
+			position: index + 1,
+			name: crumb.name,
+			item: crumb.url.startsWith('http') ? crumb.url : `${siteUrl}${crumb.url}`,
+		})),
+	};
+};
+
+// Article schema
+const getArticleSchema = () => {
+	if (!article) return null;
+	return {
+		'@context': 'https://schema.org',
+		'@type': 'Article',
+		headline: article.title,
+		description: article.description,
+		image: article.image ? (article.image.startsWith('http') ? article.image : `${siteUrl}${article.image}`) : undefined,
+		datePublished: article.publishDate,
+		author: {
+			'@type': 'Person',
+			name: article.author || siteData?.name || 'Author',
+		},
+		url: article.url || Astro.url.href,
+	};
+};
+
+let schema = null;
+switch (type) {
+	case 'person':
+		schema = getPersonSchema();
+		break;
+	case 'website':
+		schema = getWebsiteSchema();
+		break;
+	case 'breadcrumb':
+		schema = getBreadcrumbSchema();
+		break;
+	case 'article':
+		schema = getArticleSchema();
+		break;
+}
+
+if (!schema) return null;
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(schema)} />

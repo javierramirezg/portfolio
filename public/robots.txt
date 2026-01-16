@@ -1,0 +1,9 @@
+# Allow all bots
+User-agent: *
+Allow: /
+
+# Disallow CMS admin panel
+Disallow: /admin/
+
+# Sitemap location (actualizar con tu URL real después del deploy)
+# El sitemap está disponible en /sitemap.xml
