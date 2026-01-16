@@ -1,0 +1,10 @@
+items:
+  - icon: "terminal-window"
+    title: "Full Stack"
+    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod."
+  - icon: "trophy"
+    title: "Industry Leader"
+    description: "Neque viverra justo nec ultrices dui. Est ultricies integer quis auctor elit."
+  - icon: "strategy"
+    title: "Strategy-Minded"
+    description: "Urna porttitor rhoncus dolor purus non enim praesent ornare."

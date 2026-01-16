@@ -1,0 +1,30 @@
+hero:
+  title: "Hello, my name is"
+  name: "Jeanine White"
+  tagline: "I am a Creative Developer who is currently based in Portland, Oregon."
+  roles:
+    - icon: "code"
+      label: "Developer"
+    - icon: "microphone-stage"
+      label: "Speaker"
+    - icon: "pencil-line"
+      label: "Writer"
+  portrait:
+    src: "/assets/portrait.jpg"
+    alt: "Jeanine White smiling in a red plaid shirt and tortoise shell glasses"
+    width: 480
+    height: 620
+
+selectedWork:
+  title: "Selected Work"
+  description: "Take a look below at some of my featured work for clients from the past few years."
+
+mentions:
+  title: "Mentions"
+  description: "I have been fortunate enough to receive praise for my work in several publications. Take a look below to learn more."
+  brands:
+    - "Medium"
+    - "BuzzFeed"
+    - "The Next Web"
+    - "awwwards."
+    - "TechCrunch"

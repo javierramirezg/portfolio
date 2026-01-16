@@ -1,0 +1,139 @@
+backend:
+  name: git-gateway
+  branch: main # o 'master' dependiendo de tu rama principal
+
+media_folder: public/assets
+public_folder: /assets
+
+collections:
+  - name: "site"
+    label: "Site Configuration"
+    files:
+      - file: "src/content/site.yaml"
+        label: "Site Settings"
+        name: "site"
+        fields:
+          - { label: "Site Name", name: "name", widget: "string" }
+          - { label: "Email", name: "email", widget: "string", pattern: ["^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,}$", "Must be a valid email address"] }
+          - label: "Social Links"
+            name: "social"
+            widget: "list"
+            fields:
+              - { label: "Label", name: "label", widget: "string" }
+              - { label: "URL", name: "href", widget: "string", pattern: ["^https?://.+", "Must be a valid URL"] }
+              - { label: "Icon", name: "icon", widget: "string", hint: "Icon name from IconPaths (e.g., twitter-logo, github-logo)" }
+          - label: "Footer"
+            name: "footer"
+            widget: "object"
+            fields:
+              - { label: "Text", name: "text", widget: "string" }
+              - { label: "Location", name: "location", widget: "string", required: false }
+
+  - name: "home"
+    label: "Home Page"
+    files:
+      - file: "src/content/home.yaml"
+        label: "Home Content"
+        name: "home"
+        fields:
+          - label: "Hero Section"
+            name: "hero"
+            widget: "object"
+            fields:
+              - { label: "Title", name: "title", widget: "string", default: "Hello, my name is" }
+              - { label: "Name", name: "name", widget: "string" }
+              - { label: "Tagline", name: "tagline", widget: "string" }
+              - label: "Roles"
+                name: "roles"
+                widget: "list"
+                fields:
+                  - { label: "Icon", name: "icon", widget: "string", hint: "Icon name (e.g., code, microphone-stage)" }
+                  - { label: "Label", name: "label", widget: "string" }
+              - label: "Portrait Image"
+                name: "portrait"
+                widget: "object"
+                fields:
+                  - { label: "Image", name: "src", widget: "image", default: "/assets/portrait.jpg" }
+                  - { label: "Alt Text", name: "alt", widget: "string" }
+                  - { label: "Width", name: "width", widget: "number", required: false, default: 480 }
+                  - { label: "Height", name: "height", widget: "number", required: false, default: 620 }
+          - label: "Selected Work Section"
+            name: "selectedWork"
+            widget: "object"
+            fields:
+              - { label: "Title", name: "title", widget: "string" }
+              - { label: "Description", name: "description", widget: "text" }
+          - label: "Mentions Section"
+            name: "mentions"
+            widget: "object"
+            fields:
+              - { label: "Title", name: "title", widget: "string" }
+              - { label: "Description", name: "description", widget: "text" }
+              - label: "Brands"
+                name: "brands"
+                widget: "list"
+                field: { label: "Brand Name", name: "brand", widget: "string" }
+
+  - name: "about"
+    label: "About Page"
+    files:
+      - file: "src/content/about.md"
+        label: "About Content"
+        name: "about"
+        format: "frontmatter"
+        frontmatter_delimiter: "---"
+        fields:
+          - label: "Hero Section"
+            name: "hero"
+            widget: "object"
+            fields:
+              - { label: "Title", name: "title", widget: "string" }
+              - { label: "Tagline", name: "tagline", widget: "text" }
+              - label: "Hero Image"
+                name: "image"
+                widget: "object"
+                fields:
+                  - { label: "Image", name: "src", widget: "image", default: "/assets/at-work.jpg" }
+                  - { label: "Alt Text", name: "alt", widget: "string" }
+                  - { label: "Width", name: "width", widget: "number", required: false, default: 1553 }
+                  - { label: "Height", name: "height", widget: "number", required: false, default: 873 }
+          - label: "Content Sections"
+            name: "sections"
+            widget: "list"
+            fields:
+              - { label: "Section Title", name: "title", widget: "string" }
+              - { label: "Content", name: "content", widget: "markdown" }
+
+  - name: "skills"
+    label: "Skills"
+    files:
+      - file: "src/content/skills.yaml"
+        label: "Skills List"
+        name: "skills"
+        fields:
+          - label: "Skills Items"
+            name: "items"
+            widget: "list"
+            fields:
+              - { label: "Icon", name: "icon", widget: "string", hint: "Icon name (e.g., terminal-window, trophy)" }
+              - { label: "Title", name: "title", widget: "string" }
+              - { label: "Description", name: "description", widget: "text" }
+
+  - name: "work"
+    label: "Work Projects"
+    folder: "src/content/work"
+    create: true
+    slug: "{{slug}}"
+    format: "frontmatter"
+    frontmatter_delimiter: "---"
+    fields:
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Publish Date", name: "publishDate", widget: "datetime", date_format: "YYYY-MM-DD", time_format: "HH:mm:ss", format: "YYYY-MM-DD HH:mm:ss" }
+      - { label: "Featured Image", name: "img", widget: "image", default: "/assets/stock-1.jpg" }
+      - { label: "Image Alt Text", name: "img_alt", widget: "string", required: false }
+      - { label: "Description", name: "description", widget: "text" }
+      - label: "Tags"
+        name: "tags"
+        widget: "list"
+        field: { label: "Tag", name: "tag", widget: "string" }
+      - { label: "Body", name: "body", widget: "markdown" }
