@@ -124,8 +124,7 @@ collections:
     folder: "src/content/work"
     create: true
     slug: "{{slug}}"
-    format: "frontmatter"
-    frontmatter_delimiter: "---"
+    extension: "md"
     fields:
       - { label: "Title", name: "title", widget: "string" }
       - { label: "Publish Date", name: "publishDate", widget: "datetime", date_format: "YYYY-MM-DD", time_format: "HH:mm:ss", format: "YYYY-MM-DD HH:mm:ss" }
